@@ -1,27 +1,34 @@
 //
-//            Code for "distribution" function.
+//                  Distribution Body
 //
-// --------------------------------------------------------------------------------------------------------------------
-//    - Import file header
+//  ------------------------------------------------------------------------------------------------------------------
+//          Include file header:
 #include "distribution.h"
-// --------------------------------------------------------------------------------------------------------------------
-//    - Import PyBind11
+//  ------------------------------------------------------------------------------------------------------------------
+//          Import necessary libraries:
 #include <pybind11/pybind11.h>
-//    - Import some PyBind11 functionalities.
 #include <pybind11/numpy.h>
-#include <pybind11/stl.h>
-//    - Import from std-lib.
+#include <thread>
 #include <vector>
-#include <iostream>
-// --------------------------------------------------------------------------------------------------------------------
-#include "../cfg/enums.h"
-// --------------------------------------------------------------------------------------------------------------------
 namespace py = pybind11;
-// --------------------------------------------------------------------------------------------------------------------
-py::array_t<double> distribution(py::array_t<double> const &x, py::array_t<double> const &y, py::object const &params, std::vector<int> const &structure,
-    Shape shape, SamplingMode sampling_mode, double num_samples, bool threads)
-{
+//  ------------------------------------------------------------------------------------------------------------------
+//          Necessary library files:
+#include "histogram.h"
+#include "recurrence.h"
+#include "../utils/metric.h"
+//  ------------------------------------------------------------------------------------------------------------------
+pybind11::array_t<double> distribution(
+    py::array_t<double> const &x,
+    py::array_t<double> const &y,
+    py::object const &params,
+    std::vector<int> const &structure,
+    double sampling,
+    unsigned int threads
+) {
+    //  --------------------------------------------------------------------------------------------------------------
     //          Check the input format.
+    //      Here we just check if the input is a Vector or a Matrix/Array,
+    //  so if it's a vector we convert it to a matrix 1xN.
     const auto x_checked = [&]() {
         if (const py::buffer_info info = x.request(); info.ndim == 1) {
             const ssize_t N = info.shape[0];
@@ -29,7 +36,6 @@ py::array_t<double> distribution(py::array_t<double> const &x, py::array_t<doubl
             std::memcpy(result.mutable_data(), info.ptr, sizeof(double) * N);
             return result;
         }
-
         return x;
     }();
     const auto y_checked = [&]() {
@@ -39,64 +45,27 @@ py::array_t<double> distribution(py::array_t<double> const &x, py::array_t<doubl
             std::memcpy(result.mutable_data(), info.ptr, sizeof(double) * N);
             return result;
         }
-
         return y;
     }();
-
+    //  --------------------------------------------------------------------------------------------------------------
     //          Get array information.
-    const py::buffer_info x_info = x_checked.request();
-    const py::buffer_info y_info = y_checked.request();
+    const auto x_info = x_checked.request();
+    const auto y_info = y_checked.request();
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Define the number of threads to use (if necessary)
+    if (threads == 0) threads = std::thread::hardware_concurrency();
+    if (threads == 0) throw std::runtime_error("It was not possible to determine the number of available threads. Please define it manually.");
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Define the metric.
+    const std::unique_ptr<IMetric> metric_interface = std::make_unique<Euclidean>();
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Define the recurrence function.
+    const std::unique_ptr<IRecurrence> recurrence_interface = std::make_unique<StandardRecurrence>(metric_interface, params);
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Define a histogram architecture.
+    const auto histogram = std::make_unique<Histogram>(x_info, y_info, structure, recurrence_interface);
 
-    const auto x_dims = x_info.ndim - 1;
-    const auto y_dims = y_info.ndim - 1;
-
-    //          !! It is necessary that x_dims + y_dims = length(structure) !!
-    if (structure.size() != (x_dims + y_dims))
-        throw std::invalid_argument("The data is not compatible with the given structure.");
-
-    //          Compute the size of all recurrence space.
-    unsigned long total_motifs = 1;
-    std::vector<long> space_size(x_dims + y_dims);
-
-    for (auto i = 0; i < x_dims; i++) {
-        const auto len = x_info.shape[i + 1] - (structure[i] - 1);
-        if (len <= 0)
-            throw std::invalid_argument("Structure is too large for dimension of x.");
-
-        total_motifs *= len;
-        space_size[i] = len;
-    }
-
-    for (auto i = 0; i < y_dims; i++) {
-        const auto len = y_info.shape[i + 1] - (structure[x_dims + i] - 1);
-        if (len <= 0)
-            throw std::invalid_argument("Structure is too large for dimension of y.");
-
-        total_motifs *= len;
-        space_size[x_dims + i] = len;
-    }
-
-    //          Prepare the number of samples that we will be using.
-    if (num_samples <= 0 || num_samples > 1)
-        throw std::invalid_argument("The number of samples must be in the range (0, 1].");
-
-    long samples = 0;
-    if (sampling_mode == SamplingMode::Columnwise) samples = static_cast<long>(round(static_cast<double>(space_size[2]) * num_samples * structure[1]));
-    else samples = static_cast<long>(round(static_cast<double>(static_cast<double>(total_motifs) * num_samples)));
-
-    //          Call the method to compute the histogram and return it.
-    if (shape == Shape::Square) {
-        if (sampling_mode == SamplingMode::Random) {
-            return py::array_t<double>{};
-        }
-        if (sampling_mode == SamplingMode::Full) {
-            return py::array_t<double>{};
-        }
-        throw std::invalid_argument("Invalid sampling mode.");
-    }
-    if (shape == Shape::Triangle) throw std::invalid_argument("The shape Triangle is not available.");
-    if (shape == Shape::Pair) throw std::invalid_argument("The shape Pair is not available.");
-    if (shape == Shape::Line) throw std::invalid_argument("The shape Line is not available.");
-    if (shape == Shape::Diagonal) throw std::invalid_argument("The shape Diagonal is not available.");
-    throw std::invalid_argument("The library is not compatible with the given shape.");
+    //          Compute the histogram.
+    const auto result = histogram->compute(threads);
+    return py::array_t<double>(result.size(), result.data());
 }

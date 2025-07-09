@@ -24,19 +24,25 @@ from setuptools import setup, Extension
 ##      - Define the extension module settings.
 ext_modules = [
     Extension(
-        "RMAPy",
+        "rmapy",
         [
             "src/rma_py.cpp",
-            "src/rma/distribution.cpp"
+            "src/rma/distribution.cpp",
+            "src/rma/histogram.cpp",
+            "src/rma/shape.cpp",
+            "src/rma/shape/square.cpp",
+            "src/rma/sampling.cpp",
+            "src/rma/sampling/full.cpp",
         ],
         include_dirs = [pybind11.get_include()],
-        language = "c++"
+        language = "c++",
+        extra_compile_args = ["-std=c++23"],
     ),
 ]
 ## ---------------------------------------------------------------------------------------------------------------------
 ##      - Call the library setup.
 setup(
-    name = "RMAPy",
+    name = "rmapy",
     version = "0.1.0",
     description = "A Python library for analyzing dynamical systems with recurrence microstates",
     ext_modules = ext_modules

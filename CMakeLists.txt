@@ -24,7 +24,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pybind11)
 
 ##      Add the Python Module
-pybind11_add_module(rmapy src/rma_py.cpp src/rma/distribution.cpp)
+pybind11_add_module(rmapy
+        src/rma_py.cpp
+        src/rma/distribution.cpp
+        src/rma/histogram.cpp
+        src/rma/shape.cpp
+        src/rma/shape/square.cpp
+        src/rma/sampling.cpp
+        src/rma/sampling/full.cpp
+)
 
 ##      Include files .h
 target_include_directories(rmapy PRIVATE ${CMAKE_SOURCE_DIR}/src)
