@@ -32,6 +32,7 @@ pybind11_add_module(rmapy
         src/rma/shape/square.cpp
         src/rma/sampling.cpp
         src/rma/sampling/full.cpp
+        src/rma/sampling/random.cpp
 )
 
 ##      Include files .h

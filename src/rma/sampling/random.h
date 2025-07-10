@@ -1,45 +1,38 @@
 //
-//                  Histogram Header
+//                  Random Sampling Mode Header
 //
 //  ------------------------------------------------------------------------------------------------------------------
 #pragma once
 //  ------------------------------------------------------------------------------------------------------------------
-#ifndef RMA_HISTOGRAM_H
-#define RMA_HISTOGRAM_H
+#ifndef RMA_SAMPLING_MD_RANDOM_H
+#define RMA_SAMPLING_MD_RANDOM_H
 //  ------------------------------------------------------------------------------------------------------------------
 //          Import necessary libraries:
 #include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 #include <vector>
-#include <memory>
 namespace py = pybind11;
 //  ------------------------------------------------------------------------------------------------------------------
 //          Necessary library files:
-#include "shape.h"
-#include "sampling.h"
-#include "recurrence.h"
+#include "../sampling.h"
 //  ------------------------------------------------------------------------------------------------------------------
-///         Object in charge of build a histogram and return it.
-class Histogram final {
-    ///         Sampling mode.
-    std::unique_ptr<ISampling> sampler;
-    ///         Motif shape.
-    std::unique_ptr<IShape> shape;
+///         Virtual class to reference a sampling mode.
+class Random final : public ISampling {
+    ///         Number total of motifs in an RP.
+    ssize_t num_samples = 0;
+    ///         Function to get each motif position and run the process. (In each thread)
+    [[nodiscard]] std::vector<double> task(ssize_t begin, ssize_t end) const override;
 public:
-    ///         Compute the distribution.
-    std::vector<double> compute(unsigned int threads) const;
-    ///         Class constructor.
-    explicit Histogram(
+    ///         Run!
+    [[nodiscard]] const std::vector<double> run(unsigned int threads) const override;
+    ///         Class construction.
+    explicit Random(
         const py::buffer_info &x,
         const py::buffer_info &y,
+        const std::unique_ptr<IShape> &shape,
         const std::vector<int> &structure,
-        const std::unique_ptr<IRecurrence> &recurrence,
-        double sampling_rate,
-        SamplingMode sampling_mode
+        double sampling_rate
         );
-    ///         Class deconstruction.
-    ~Histogram() = default;
 };
 //  ------------------------------------------------------------------------------------------------------------------
 #endif

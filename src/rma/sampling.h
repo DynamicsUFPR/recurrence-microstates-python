@@ -18,6 +18,9 @@ namespace py = pybind11;
 //          Necessary library files:
 #include "shape.h"
 //  ------------------------------------------------------------------------------------------------------------------
+//          Sampling modes:
+enum class SamplingMode { Full, Random };
+//  ------------------------------------------------------------------------------------------------------------------
 ///         Virtual class to reference a sampling mode.
 class ISampling {
 protected:

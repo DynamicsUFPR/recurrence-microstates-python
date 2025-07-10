@@ -7,13 +7,26 @@
 //  ------------------------------------------------------------------------------------------------------------------
 //          Necessary library files:
 #include "sampling/full.h"
+#include "sampling/random.h"
 #include "shape/square.h"
 //  ------------------------------------------------------------------------------------------------------------------
-Histogram::Histogram(const py::buffer_info &x, const py::buffer_info &y, const std::vector<int> &structure, const std::unique_ptr<IRecurrence> &recurrence) {
+Histogram::Histogram(
+    const py::buffer_info &x,
+    const py::buffer_info &y,
+    const std::vector<int> &structure,
+    const std::unique_ptr<IRecurrence> &recurrence,
+    const double sampling_rate,
+    const SamplingMode sampling_mode
+    ) {
     //          Initialize the shape.
     shape = std::make_unique<Square>(x, y, structure, recurrence);
     //          Initialize the sampling mode.
-    sampler = std::make_unique<Full>(x, y, shape, structure);
+    switch (sampling_mode) {
+        case SamplingMode::Full: sampler = std::make_unique<Full>(x, y, shape, structure, sampling_rate); break;
+        case SamplingMode::Random: sampler = std::make_unique<Random>(x, y, shape, structure, sampling_rate); break;
+        default: throw std::runtime_error("Invalid sampling mode");
+    }
+
 }
 //  ------------------------------------------------------------------------------------------------------------------
 std::vector<double> Histogram::compute(const unsigned int threads) const {

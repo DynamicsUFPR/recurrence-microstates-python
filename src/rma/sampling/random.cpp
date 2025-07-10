@@ -1,16 +1,14 @@
 //
-//                  Full Sampling Mode Body
+//                  Random Sampling Mode Body
 //
 //  ------------------------------------------------------------------------------------------------------------------
 //          Include file header:
-#include "full.h"
+#include "random.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Import necessary libraries:
 #include <iostream>
 #include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-#include <numeric>
-#include <memory>
+#include <random>
 #include <vector>
 #include <future>
 #include <cmath>
@@ -20,12 +18,12 @@ namespace py = pybind11;
 #include "../shape.h"
 #include "../sampling.h"
 //  ------------------------------------------------------------------------------------------------------------------
-Full::Full(
+Random::Random(
     const py::buffer_info &x,
     const py::buffer_info &y,
     const std::unique_ptr<IShape> &shape,
     const std::vector<int> &structure,
-    double _
+    double sampling_rate
     ) : ISampling(x, y, shape, structure) {
     //          Define the usable RP size
     const ssize_t x_dims = x.ndim - 1;
@@ -34,6 +32,7 @@ Full::Full(
     if (structure.size() != x_dims + y_dims) throw std::invalid_argument("Structure is not compatible with the input data.");
     if (x.shape[0] != y.shape[0]) throw std::invalid_argument("`x` and `y` first dimension must have same size.");
 
+    ssize_t total_motifs = 1;
     for (ssize_t i = 0; i < x_dims; i++) {
         const ssize_t len = x.shape[i + 1] - (structure[i] - 1);
         if (len <= 0)
@@ -51,12 +50,14 @@ Full::Full(
         total_motifs *= len;
         rp_structure[i + x_dims] = len;
     }
+
+    num_samples = static_cast<ssize_t>(std::floor(sampling_rate * static_cast<double>(total_motifs)));
 }
 //  ------------------------------------------------------------------------------------------------------------------
-const std::vector<double> Full::run(const unsigned int threads) const {
+auto Random::run(const unsigned int threads) const -> const std::vector<double> {
     //      Compute the number of "rows" that we have per thread, and the mod of this operation.
-    const ssize_t int_rows = std::floor(rp_structure[0] / threads);
-    ssize_t rest_rows = rp_structure[0] % threads;
+    const auto int_rows = static_cast<ssize_t>(std::floor(num_samples / threads));
+    ssize_t rest_rows = num_samples % threads;
 
     //      Call our tasks...
     ssize_t start_value = 0;
@@ -83,43 +84,29 @@ const std::vector<double> Full::run(const unsigned int threads) const {
 
     //      Normalize...
     for (ssize_t p = 0; p < shape->numb_motifs(); p++)
-        result[p] /= total_motifs;
+        result[p] /= static_cast<double>(num_samples);
 
     return result;
 }
 //  ------------------------------------------------------------------------------------------------------------------
-std::vector<double> Full::task(const ssize_t begin, const ssize_t end) const {
+std::vector<double> Random::task(const ssize_t begin, const ssize_t end) const {
 
     //          Allocate memory.
     std::vector<double> result(shape->numb_motifs(), 0);
 
     std::vector<ssize_t> idx(structure_size, 0);
     std::vector<ssize_t> itr(structure_size, 0);
-    idx[0] = begin;
 
-    //          Number of elements.
-    const ssize_t elements = ((end - begin) + 1) * std::accumulate(rp_structure.begin() + 1, rp_structure.end(), 1 ,std::multiplies());
+    //          Random generator.
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
 
     //          Run
-    for (ssize_t i = 0; i < elements; i++) {
-        result[shape->get_index(idx, itr)]++;
-
-        idx[0]++;
-        for (ssize_t k = 0; k < structure_size - 1; k++) {
-            if (k == 0) {
-                if (idx[k] > end) {
-                    idx[k] = begin;
-                    idx[k + 1]++;
-                }
-                else break;
-                continue;
-            }
-            if (idx[k] >= rp_structure[k]) {
-                idx[k] = 0;
-                idx[k + 1]++;
-            }
-            else break;
+    for (ssize_t i = begin; i <= end; i++) {
+        for (ssize_t s = 0; s < rp_structure.size(); ++s) {
+            idx[s] = std::uniform_int_distribution<ssize_t>(1, rp_structure[s])(gen);
         }
+        result[shape->get_index(idx, itr)]++;
     }
 
     //          Return the result.

@@ -33,6 +33,7 @@ ext_modules = [
             "src/rma/shape/square.cpp",
             "src/rma/sampling.cpp",
             "src/rma/sampling/full.cpp",
+            "src/rma/sampling/random.cpp"
         ],
         include_dirs = [pybind11.get_include()],
         language = "c++",

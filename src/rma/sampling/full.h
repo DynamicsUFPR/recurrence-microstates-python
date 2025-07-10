@@ -27,7 +27,13 @@ public:
     ///         Run!
     const std::vector<double> run(unsigned int threads) const override;
     ///         Class construction.
-    explicit Full(const py::buffer_info &x, const py::buffer_info &y, const std::unique_ptr<IShape> &shape, const std::vector<int> &structure);
+    explicit Full(
+        const py::buffer_info &x,
+        const py::buffer_info &y,
+        const std::unique_ptr<IShape> &shape,
+        const std::vector<int> &structure,
+        double sampling_rate
+        );
 };
 //  ------------------------------------------------------------------------------------------------------------------
 #endif
