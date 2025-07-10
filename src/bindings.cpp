@@ -11,6 +11,8 @@ namespace py = pybind11;
 //          Library files:
 #include "rma/distribution.h"
 #include "rma/sampling.h"
+#include "rqa/rr.h"
+#include "rqa/lam.h"
 #include "rqa/entropy.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Define the Python module:
@@ -78,6 +80,11 @@ PYBIND11_MODULE(rmapy, m) {
     );
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `entropy` function.
-    m.def("entropy", &entropy, "Compute the recurrence microstates entropy.",
-        py::arg("dist"));
+    m.def("entropy", &entropy, "Compute the recurrence microstates entropy.", py::arg("dist"));
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Export `rate` function.
+    m.def("rate", &rate, "Estimate the recurrence rate.", py::arg("dist"));
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Export `laminarity` function.
+    m.def("laminarity", &laminarity, "Estimate the laminarity", py::arg("x"), py::arg("threshold"));
 }

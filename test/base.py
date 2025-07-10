@@ -9,14 +9,19 @@ import time
 data = np.random.rand(3, 1000).astype(np.float64)
 
 ##      Try apply the RMAPy.
-inicio = time.time()
-dist = rma.distribution(data, 0.2, 3)
-s = rma.entropy(dist)
-fim = time.time()
+# inicio = time.time()
+# dist = rma.distribution(data, 0.2, 3)
+# s = rma.entropy(dist)
+# rr = rma.rate(dist)
+# fim = time.time()
 
 ##      Print the result.
-print(dist)
-print(s)
-print(len(dist))
-print(sum(dist))
-print(f"Time: {(fim - inicio) * 1000:.2f} ms")
+# print(dist)
+# print(s)
+# print(rr)
+# print(len(dist))
+# print(sum(dist))
+# print(f"Time: {(fim - inicio) * 1000:.2f} ms")
+
+teste = rma.laminarity(data, 0.2)
+print(teste)
