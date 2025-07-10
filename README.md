@@ -31,7 +31,7 @@ try renaming the folder `RMAPy` to `rmapy`, and run `pip install .` again.
 
 The library has been written with a structure similar to [Julia' version](https://github.com/DynamicsUFPR/RecurrenceMicrostatesAnalysis.jl),
 so you can use its documentation as a reference. However, since `RMAPy` is not a native library like `RecurrenceMicrostatesAnalysis.jl`, there are
-some variations in the settings.
+some variations in how *kwarg* settings are implemented.
 
 ```python
 import numpy as np
