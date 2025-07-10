@@ -8,6 +8,9 @@ import time
 ##      Create a "data".
 data = np.random.rand(3, 1000).astype(np.float64)
 
+det = rma.determinism(data, 0.2)
+print(det)
+
 ##      Try apply the RMAPy.
 # inicio = time.time()
 # dist = rma.distribution(data, 0.2, 3)
@@ -22,6 +25,3 @@ data = np.random.rand(3, 1000).astype(np.float64)
 # print(len(dist))
 # print(sum(dist))
 # print(f"Time: {(fim - inicio) * 1000:.2f} ms")
-
-teste = rma.laminarity(data, 0.2)
-print(teste)

@@ -1,5 +1,5 @@
 //
-//                  Recurrence Microstates Entropy (RME) Header
+//                  Recurrence Rate (RR) Header
 //
 //  ------------------------------------------------------------------------------------------------------------------
 #pragma once

@@ -30,6 +30,7 @@ pybind11_add_module(rmapy
         src/rma/histogram.cpp
         src/rma/shape.cpp
         src/rma/shape/square.cpp
+        src/rma/shape/diagonal.cpp
         src/rma/sampling.cpp
         src/rma/sampling/full.cpp
         src/rma/sampling/random.cpp

@@ -13,6 +13,7 @@
 #include <pybind11/stl.h>
 #include <vector>
 
+#include "shape.h"
 #include "sampling.h"
 namespace py = pybind11;
 //  ------------------------------------------------------------------------------------------------------------------
@@ -24,7 +25,8 @@ pybind11::array_t<double> distribution(
     std::vector<int> const &structure,
     double sampling = 0.05,
     unsigned int threads = 0,
-    SamplingMode sampling_mode = SamplingMode::Random
+    SamplingMode sampling_mode = SamplingMode::Random,
+    ShapeName shape_name = ShapeName::Square
 );
 //  ------------------------------------------------------------------------------------------------------------------
 ///     Compute a recurrence motif distribution.
@@ -35,7 +37,8 @@ pybind11::array_t<double> distribution(
     const py::int_ &n,
     double sampling = 0.05,
     unsigned int threads = 0,
-    SamplingMode sampling_mode = SamplingMode::Random
+    SamplingMode sampling_mode = SamplingMode::Random,
+    ShapeName shape_name = ShapeName::Square
 );
 //  ------------------------------------------------------------------------------------------------------------------
 ///     Compute a recurrence motif distribution.
@@ -45,7 +48,8 @@ pybind11::array_t<double> distribution(
     const py::int_ &n,
     double sampling = 0.05,
     unsigned int threads = 0,
-    SamplingMode sampling_mode = SamplingMode::Random
+    SamplingMode sampling_mode = SamplingMode::Random,
+    ShapeName shape_name = ShapeName::Square
 );
 //  ------------------------------------------------------------------------------------------------------------------
 #endif

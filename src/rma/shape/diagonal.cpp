@@ -3,13 +3,12 @@
 //
 //  ------------------------------------------------------------------------------------------------------------------
 //          Include file header:
-#include "square.h"
-#include <iostream>
+#include "diagonal.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Necessary library files:
 #include "../shape.h"
 //  ------------------------------------------------------------------------------------------------------------------
-Square::Square(
+Diagonal::Diagonal(
     const py::buffer_info &x,
     const py::buffer_info &y,
     const std::vector<int> &structure,
@@ -18,17 +17,17 @@ Square::Square(
     //          Compute the motif area.
     motif_area = compute_area();
     //          Build our power vector.
-    power_vector = std::vector(motif_area, 1);
+    power_vector = std::vector<int>(motif_area, 1);
     for (int i = 0; i < motif_area; i++) {
         power_vector[i] = static_cast<int>(std::pow(2, i));
     }
 }
 //  ------------------------------------------------------------------------------------------------------------------
-int Square::compute_area() const {
-    return std::accumulate(structure.begin(), structure.end(), 1, std::multiplies());
+int Diagonal::compute_area() const {
+    return structure[0];
 }
 //  ------------------------------------------------------------------------------------------------------------------
-const ssize_t Square::get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const {
+const ssize_t Diagonal::get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const {
     ssize_t index = 0;
     //          Copy values from idx to itr.
     std::ranges::copy(idx, itr.begin());
@@ -49,14 +48,8 @@ const ssize_t Square::get_index(const std::vector<ssize_t> &idx, std::vector<ssi
         if (recurrence->compute(x, y, first_dim_shape, first_dim_stride, x_idx, y_idx))
             index += m;
 
-        itr[0]++;
-        for (ssize_t k = 0; k < structure.size() - 1; k++) {
-            if (itr[k] > idx[k] + (structure[k] - 1)) {
-                itr[k] = idx[k];
-                itr[k + 1]++;
-                continue;
-            }
-            break;
+        for (ssize_t k = 0; k < structure.size(); k++) {
+            itr[k] += 1;
         }
     }
 

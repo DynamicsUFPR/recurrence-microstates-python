@@ -1,11 +1,11 @@
 //
-//                  Laminarity (LAM) Header
+//                  Determinism (DET) Header
 //
 //  ------------------------------------------------------------------------------------------------------------------
 #pragma once
 //  ------------------------------------------------------------------------------------------------------------------
-#ifndef RQA_LAM_H
-#define RQA_LAM_H
+#ifndef RQA_DET_H
+#define RQA_DET_H
 //  ------------------------------------------------------------------------------------------------------------------
 //          Import necessary libraries:
 #include <iostream>
@@ -19,9 +19,9 @@ namespace py = pybind11;
 #include "rr.h"
 //  ------------------------------------------------------------------------------------------------------------------
 ///         Compute the laminarity.
-inline double laminarity(const py::array_t<double> &x, const py::object &threshold) {
+inline double determinism(const py::array_t<double> &x, const py::object &threshold) {
     //          Compute the distribution.
-    const py::array_t<double> dist = distribution(x, x, threshold, std::vector<int>{3, 1});
+    const py::array_t<double> dist = distribution(x, threshold, 3, 0.05, 0, SamplingMode::Random, ShapeName::Diagonal);
 
     const py::buffer_info info = dist.request();
     const auto ptr = static_cast<double *>(info.ptr);

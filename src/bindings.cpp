@@ -11,8 +11,10 @@ namespace py = pybind11;
 //          Library files:
 #include "rma/distribution.h"
 #include "rma/sampling.h"
+#include "rma/shape.h"
 #include "rqa/rr.h"
 #include "rqa/lam.h"
+#include "rqa/det.h"
 #include "rqa/entropy.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Define the Python module:
@@ -24,6 +26,11 @@ PYBIND11_MODULE(rmapy, m) {
         .value("Full", SamplingMode::Full)
         .value("Random", SamplingMode::Random);
     //  --------------------------------------------------------------------------------------------------------------
+    //          Export shapes.
+    py::enum_<ShapeName>(m, "Shape")
+        .value("Shape", ShapeName::Square)
+        .value("Diagonal", ShapeName::Diagonal);
+    //  --------------------------------------------------------------------------------------------------------------
     //          Export `distribution` function.
     m.def("distribution", static_cast<py::array_t<double>(*)(
             const py::array_t<double>&,
@@ -32,7 +39,8 @@ PYBIND11_MODULE(rmapy, m) {
             const std::vector<int>&,
             double,
             unsigned int,
-            SamplingMode
+            SamplingMode,
+            ShapeName
         )>(&distribution)
         , "Compute a motif recurrence distribution.",
         py::arg("x"),
@@ -41,7 +49,9 @@ PYBIND11_MODULE(rmapy, m) {
         py::arg("structure"),
         py::arg("sampling") = 0.05,
         py::arg("threads") = 0,
-        py::arg("sampling_mode") = SamplingMode::Random);
+        py::arg("sampling_mode") = SamplingMode::Random,
+        py::arg("shape") = ShapeName::Square
+        );
 
     m.def("distribution",
         static_cast<py::array_t<double>(*)(
@@ -51,7 +61,8 @@ PYBIND11_MODULE(rmapy, m) {
             const py::int_&,
             double,
             unsigned int,
-            SamplingMode
+            SamplingMode,
+            ShapeName
         )>(&distribution),
         py::arg("x"),
         py::arg("y"),
@@ -59,7 +70,8 @@ PYBIND11_MODULE(rmapy, m) {
         py::arg("n"),
         py::arg("sampling") = 0.05,
         py::arg("threads") = 0,
-        py::arg("sampling_mode") = SamplingMode::Random
+        py::arg("sampling_mode") = SamplingMode::Random,
+        py::arg("shape") = ShapeName::Square
     );
 
     m.def("distribution",
@@ -69,14 +81,16 @@ PYBIND11_MODULE(rmapy, m) {
             const py::int_&,
             double,
             unsigned int,
-            SamplingMode
+            SamplingMode,
+            ShapeName
         )>(&distribution),
         py::arg("x"),
         py::arg("params"),
         py::arg("n"),
         py::arg("sampling") = 0.05,
         py::arg("threads") = 0,
-        py::arg("sampling_mode") = SamplingMode::Random
+        py::arg("sampling_mode") = SamplingMode::Random,
+        py::arg("shape") = ShapeName::Square
     );
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `entropy` function.
@@ -87,4 +101,7 @@ PYBIND11_MODULE(rmapy, m) {
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `laminarity` function.
     m.def("laminarity", &laminarity, "Estimate the laminarity", py::arg("x"), py::arg("threshold"));
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Export `determinism` function.
+    m.def("determinism", &determinism, "Estimate the determinism", py::arg("x"), py::arg("threshold"));
 }

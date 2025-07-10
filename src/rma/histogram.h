@@ -36,7 +36,8 @@ public:
         const std::vector<int> &structure,
         const std::unique_ptr<IRecurrence> &recurrence,
         double sampling_rate,
-        SamplingMode sampling_mode
+        SamplingMode sampling_mode,
+        ShapeName shape_name
         );
     ///         Class deconstruction.
     ~Histogram() = default;

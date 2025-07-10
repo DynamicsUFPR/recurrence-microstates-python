@@ -24,7 +24,8 @@ pybind11::array_t<double> distribution(
     std::vector<int> const &structure,
     double sampling,
     unsigned int threads,
-    SamplingMode sampling_mode
+    SamplingMode sampling_mode,
+    const ShapeName shape_name
 ) {
     //  --------------------------------------------------------------------------------------------------------------
     //          Check the input format.
@@ -64,11 +65,11 @@ pybind11::array_t<double> distribution(
     const std::unique_ptr<IRecurrence> recurrence_interface = std::make_unique<StandardRecurrence>(metric_interface, params);
     //  --------------------------------------------------------------------------------------------------------------
     //          Define a histogram architecture.
-    const auto histogram = std::make_unique<Histogram>(x_info, y_info, structure, recurrence_interface, sampling, sampling_mode);
+    const auto histogram = std::make_unique<Histogram>(x_info, y_info, structure, recurrence_interface, sampling, sampling_mode, shape_name);
 
     //          Compute the histogram.
     const auto result = histogram->compute(threads);
-    return py::array_t(result.size(), result.data());
+    return py::array_t(static_cast<ssize_t>(result.size()), result.data());
 }
 
 pybind11::array_t<double> distribution(
@@ -78,7 +79,8 @@ pybind11::array_t<double> distribution(
     const py::int_ &n,
     const double sampling,
     const unsigned int threads,
-    const SamplingMode sampling_mode
+    const SamplingMode sampling_mode,
+    const ShapeName shape_name
     ) {
     //      Initialize...
     //  --------------------------------------------------------------------------------------------------------------
@@ -120,13 +122,22 @@ pybind11::array_t<double> distribution(
         structure,
         sampling,
         threads,
-        sampling_mode
+        sampling_mode,
+        shape_name
         );
 }
 //  --------------------------------------------------------------------------------------------------------------
-pybind11::array_t<double> distribution(py::array_t<double> const &x, py::object const &params, const py::int_ &n,
-    const double sampling, const unsigned int threads, const SamplingMode sampling_mode) {
-    return distribution(x, x, params, n, sampling, threads, sampling_mode);
+pybind11::array_t<double> distribution(
+    py::array_t<double> const &x,
+    py::object const &params,
+    const py::int_ &n,
+    const double sampling,
+    const unsigned int threads,
+    const SamplingMode sampling_mode,
+    const ShapeName shape_name
+    ) {
+
+    return distribution(x, x, params, n, sampling, threads, sampling_mode, shape_name);
 }
 
 //  ------------------------------------------------------------------------------------------------------------------

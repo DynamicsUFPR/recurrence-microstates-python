@@ -20,6 +20,9 @@
 #include "recurrence.h"
 namespace py = pybind11;
 //  ------------------------------------------------------------------------------------------------------------------
+//          Shape names:
+enum class ShapeName { Square, Diagonal };
+//  ------------------------------------------------------------------------------------------------------------------
 ///         Virtual class to reference motif shapes.
 class IShape {
 protected:
@@ -41,12 +44,12 @@ protected:
     ssize_t first_dim_shape;
     ssize_t first_dim_stride;
     ///         Compute the motif area.
-    virtual int compute_area() const = 0;
+    [[nodiscard]] virtual int compute_area() const = 0;
 public:
     ///         Compute a motif decimal identifier (MDI).
-    virtual const ssize_t get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const = 0;
+    virtual auto get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const -> const ssize_t = 0;
     ///         Get the number of motifs that can exist.
-    ssize_t numb_motifs() const;
+    [[nodiscard]] ssize_t numb_motifs() const;
     ///         Class construction.
     explicit IShape(const py::buffer_info &x, const py::buffer_info &y, const std::vector<int> &structure, const std::unique_ptr<IRecurrence> &recurrence);
     ///         Class deconstruction.

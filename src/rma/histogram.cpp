@@ -8,6 +8,7 @@
 //          Necessary library files:
 #include "sampling/full.h"
 #include "sampling/random.h"
+#include "shape/diagonal.h"
 #include "shape/square.h"
 //  ------------------------------------------------------------------------------------------------------------------
 Histogram::Histogram(
@@ -16,10 +17,16 @@ Histogram::Histogram(
     const std::vector<int> &structure,
     const std::unique_ptr<IRecurrence> &recurrence,
     const double sampling_rate,
-    const SamplingMode sampling_mode
+    const SamplingMode sampling_mode,
+    const ShapeName shape_name
     ) {
     //          Initialize the shape.
-    shape = std::make_unique<Square>(x, y, structure, recurrence);
+    switch (shape_name) {
+        case ShapeName::Square: shape = std::make_unique<Square>(x, y, structure, recurrence); break;
+        case ShapeName::Diagonal: shape = std::make_unique<Diagonal>(x, y, structure, recurrence); break;
+        default: throw std::invalid_argument("Unknown shape name");
+    }
+
     //          Initialize the sampling mode.
     switch (sampling_mode) {
         case SamplingMode::Full: sampler = std::make_unique<Full>(x, y, shape, structure, sampling_rate); break;
