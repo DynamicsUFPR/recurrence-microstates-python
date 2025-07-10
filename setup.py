@@ -26,7 +26,7 @@ ext_modules = [
     Extension(
         "rmapy",
         [
-            "src/rma_py.cpp",
+            "src/bindings.cpp",
             "src/rma/distribution.cpp",
             "src/rma/histogram.cpp",
             "src/rma/shape.cpp",
@@ -45,5 +45,6 @@ setup(
     name = "rmapy",
     version = "0.1.0",
     description = "A Python library for analyzing dynamical systems with recurrence microstates",
-    ext_modules = ext_modules
+    ext_modules = ext_modules,
+    zip_safe = False,
 )

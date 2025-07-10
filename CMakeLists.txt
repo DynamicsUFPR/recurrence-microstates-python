@@ -25,7 +25,7 @@ FetchContent_MakeAvailable(pybind11)
 
 ##      Add the Python Module
 pybind11_add_module(rmapy
-        src/rma_py.cpp
+        src/bindings.cpp
         src/rma/distribution.cpp
         src/rma/histogram.cpp
         src/rma/shape.cpp

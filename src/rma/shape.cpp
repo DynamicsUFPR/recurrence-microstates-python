@@ -27,7 +27,7 @@ ssize_t IShape::numb_motifs() const {
     if (motif_area <= 0) throw std::runtime_error("Motif's area is not positive");
 
     //          Compute 2^\sigma.
-    const double pow_result = std::pow(motif_area, 2);
+    const double pow_result = std::pow(2, motif_area);
     if (pow_result < 0.0) throw std::runtime_error("Motif's area is negative");
     if (pow_result > static_cast<double>(std::numeric_limits<int>::max())) throw std::runtime_error("Motif's area is too large");
 

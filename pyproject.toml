@@ -1,3 +1,15 @@
 [build-system]
 requires = ["pybind11", "setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "rmapy"
+version = "0.1.0"
+description = "A Python library for analyzing dynamical systems with recurrence microstates."
+authors = [
+    { name = "Gabriel Vinicius Ferreira", email = "gabriel.vferreira@icloud.com"}
+]
+readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/DynamicsUFPR/RMAPy"

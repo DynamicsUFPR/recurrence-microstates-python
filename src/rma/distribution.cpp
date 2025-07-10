@@ -67,5 +67,5 @@ pybind11::array_t<double> distribution(
 
     //          Compute the histogram.
     const auto result = histogram->compute(threads);
-    return py::array_t<double>(result.size(), result.data());
+    return py::array_t(result.size(), result.data());
 }

@@ -20,7 +20,7 @@ Square::Square(
     //          Build our power vector.
     power_vector = std::vector<int>(motif_area, 1);
     for (int i = 0; i < motif_area; i++) {
-        power_vector[i] = std::pow(2, i);
+        power_vector[i] = static_cast<int>(std::pow(2, i));
     }
 }
 //  ------------------------------------------------------------------------------------------------------------------
@@ -30,12 +30,11 @@ int Square::compute_area() const {
 //  ------------------------------------------------------------------------------------------------------------------
 const ssize_t Square::get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const {
     ssize_t index = 0;
-
     //          Copy values from idx to itr.
     std::ranges::copy(idx, itr.begin());
 
     //          Iterate...
-    for (ssize_t m = 0; m < power_vector.size(); m++) {
+    for (const int m : power_vector) {
         ssize_t x_idx = 0;
         ssize_t y_idx = 0;
 
@@ -44,18 +43,20 @@ const ssize_t Square::get_index(const std::vector<ssize_t> &idx, std::vector<ssi
         }
 
         for (ssize_t i = 1; i < y_info.ndim; i++) {
-            y_idx += itr[(i - 2) + y_info.ndim] * y_info.strides[i];
+            y_idx += itr[(i - 1) + (x_info.ndim - 1)] * y_info.strides[i];
         }
 
         if (recurrence->compute(x, y, first_dim_shape, first_dim_stride, x_idx, y_idx))
-            index += power_vector[m];
+            index += m;
 
         itr[0]++;
         for (ssize_t k = 0; k < structure.size() - 1; k++) {
-            if (itr[k] >= idx[k] + structure[k]) {
+            if (itr[k] > idx[k] + (structure[k] - 1)) {
                 itr[k] = idx[k];
                 itr[k + 1]++;
-            } else break;
+                continue;
+            }
+            break;
         }
     }
 
