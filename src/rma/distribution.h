@@ -38,4 +38,14 @@ pybind11::array_t<double> distribution(
     SamplingMode sampling_mode = SamplingMode::Random
 );
 //  ------------------------------------------------------------------------------------------------------------------
+///     Compute a recurrence motif distribution.
+pybind11::array_t<double> distribution(
+    py::array_t<double> const &x,
+    py::object const &params,
+    const py::int_ &n,
+    double sampling = 0.05,
+    unsigned int threads = 0,
+    SamplingMode sampling_mode = SamplingMode::Random
+);
+//  ------------------------------------------------------------------------------------------------------------------
 #endif

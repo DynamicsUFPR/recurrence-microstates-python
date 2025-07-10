@@ -10,7 +10,7 @@ data = np.random.rand(3, 1000).astype(np.float64)
 
 ##      Try apply the RMAPy.
 inicio = time.time()
-dist = rma.distribution(data, data, 0.2, [3, 3])
+dist = rma.distribution(data, 0.2, 3)
 s = rma.entropy(dist)
 fim = time.time()
 

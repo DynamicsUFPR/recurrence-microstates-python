@@ -123,4 +123,10 @@ pybind11::array_t<double> distribution(
         sampling_mode
         );
 }
+//  --------------------------------------------------------------------------------------------------------------
+pybind11::array_t<double> distribution(py::array_t<double> const &x, py::object const &params, const py::int_ &n,
+    const double sampling, const unsigned int threads, const SamplingMode sampling_mode) {
+    return distribution(x, x, params, n, sampling, threads, sampling_mode);
+}
+
 //  ------------------------------------------------------------------------------------------------------------------
