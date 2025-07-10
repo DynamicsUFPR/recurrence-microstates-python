@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Ignore some folders
+.idea
+cmake-build-debug
+rmapy.egg-info
+build
