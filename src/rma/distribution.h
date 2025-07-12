@@ -26,7 +26,8 @@ pybind11::array_t<double> distribution(
     double sampling = 0.05,
     unsigned int threads = 0,
     SamplingMode sampling_mode = SamplingMode::Random,
-    ShapeName shape_name = ShapeName::Square
+    ShapeName shape_name = ShapeName::Square,
+    RecurrenceFunction recurrence = RecurrenceFunction::Standard
 );
 //  ------------------------------------------------------------------------------------------------------------------
 ///     Compute a recurrence motif distribution.
@@ -38,7 +39,8 @@ pybind11::array_t<double> distribution(
     double sampling = 0.05,
     unsigned int threads = 0,
     SamplingMode sampling_mode = SamplingMode::Random,
-    ShapeName shape_name = ShapeName::Square
+    ShapeName shape_name = ShapeName::Square,
+    RecurrenceFunction recurrence = RecurrenceFunction::Standard
 );
 //  ------------------------------------------------------------------------------------------------------------------
 ///     Compute a recurrence motif distribution.
@@ -49,7 +51,8 @@ pybind11::array_t<double> distribution(
     double sampling = 0.05,
     unsigned int threads = 0,
     SamplingMode sampling_mode = SamplingMode::Random,
-    ShapeName shape_name = ShapeName::Square
+    ShapeName shape_name = ShapeName::Square,
+    RecurrenceFunction recurrence = RecurrenceFunction::Standard
 );
 //  ------------------------------------------------------------------------------------------------------------------
 #endif

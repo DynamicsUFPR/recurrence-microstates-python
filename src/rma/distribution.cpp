@@ -25,7 +25,8 @@ pybind11::array_t<double> distribution(
     double sampling,
     unsigned int threads,
     SamplingMode sampling_mode,
-    const ShapeName shape_name
+    const ShapeName shape_name,
+    const RecurrenceFunction recurrence
 ) {
     //  --------------------------------------------------------------------------------------------------------------
     //          Check the input format.
@@ -62,7 +63,13 @@ pybind11::array_t<double> distribution(
     const std::unique_ptr<IMetric> metric_interface = std::make_unique<Euclidean>();
     //  --------------------------------------------------------------------------------------------------------------
     //          Define the recurrence function.
-    const std::unique_ptr<IRecurrence> recurrence_interface = std::make_unique<StandardRecurrence>(metric_interface, params);
+    std::unique_ptr<IRecurrence> recurrence_interface;
+    switch (recurrence) {
+        case RecurrenceFunction::Standard: recurrence_interface = std::make_unique<StandardRecurrence>(metric_interface, params); break;
+        case RecurrenceFunction::Corridor: recurrence_interface = std::make_unique<CorridorRecurrence>(metric_interface, params); break;
+        case RecurrenceFunction::JRP: recurrence_interface = std::make_unique<JRP>(metric_interface, params); break;
+        default: throw std::runtime_error("Recurrence function not implemented.");
+    }
     //  --------------------------------------------------------------------------------------------------------------
     //          Define a histogram architecture.
     const auto histogram = std::make_unique<Histogram>(x_info, y_info, structure, recurrence_interface, sampling, sampling_mode, shape_name);
@@ -80,7 +87,8 @@ pybind11::array_t<double> distribution(
     const double sampling,
     const unsigned int threads,
     const SamplingMode sampling_mode,
-    const ShapeName shape_name
+    const ShapeName shape_name,
+    const RecurrenceFunction recurrence
     ) {
     //      Initialize...
     //  --------------------------------------------------------------------------------------------------------------
@@ -123,7 +131,8 @@ pybind11::array_t<double> distribution(
         sampling,
         threads,
         sampling_mode,
-        shape_name
+        shape_name,
+        recurrence
         );
 }
 //  --------------------------------------------------------------------------------------------------------------
@@ -134,10 +143,11 @@ pybind11::array_t<double> distribution(
     const double sampling,
     const unsigned int threads,
     const SamplingMode sampling_mode,
-    const ShapeName shape_name
+    const ShapeName shape_name,
+    const RecurrenceFunction recurrence
     ) {
 
-    return distribution(x, x, params, n, sampling, threads, sampling_mode, shape_name);
+    return distribution(x, x, params, n, sampling, threads, sampling_mode, shape_name, recurrence);
 }
 
 //  ------------------------------------------------------------------------------------------------------------------

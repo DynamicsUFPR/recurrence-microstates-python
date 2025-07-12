@@ -12,6 +12,7 @@ namespace py = pybind11;
 #include "rma/distribution.h"
 #include "rma/sampling.h"
 #include "rma/shape.h"
+#include "rma/recurrence.h"
 #include "rqa/rr.h"
 #include "rqa/lam.h"
 #include "rqa/det.h"
@@ -28,8 +29,14 @@ PYBIND11_MODULE(rmapy, m) {
     //  --------------------------------------------------------------------------------------------------------------
     //          Export shapes.
     py::enum_<ShapeName>(m, "Shape")
-        .value("Shape", ShapeName::Square)
+        .value("Square", ShapeName::Square)
         .value("Diagonal", ShapeName::Diagonal);
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Export recurrence functions.
+    py::enum_<RecurrenceFunction>(m, "Recurrence")
+        .value("Standard", RecurrenceFunction::Standard)
+        .value("Corridor", RecurrenceFunction::Corridor)
+        .value("JRP", RecurrenceFunction::JRP);
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `distribution` function.
     m.def("distribution", static_cast<py::array_t<double>(*)(
@@ -40,7 +47,8 @@ PYBIND11_MODULE(rmapy, m) {
             double,
             unsigned int,
             SamplingMode,
-            ShapeName
+            ShapeName,
+            RecurrenceFunction
         )>(&distribution)
         , "Compute a motif recurrence distribution.",
         py::arg("x"),
@@ -50,7 +58,8 @@ PYBIND11_MODULE(rmapy, m) {
         py::arg("sampling") = 0.05,
         py::arg("threads") = 0,
         py::arg("sampling_mode") = SamplingMode::Random,
-        py::arg("shape") = ShapeName::Square
+        py::arg("shape") = ShapeName::Square,
+        py::arg("recurrence") = RecurrenceFunction::Standard
         );
 
     m.def("distribution",
@@ -62,7 +71,8 @@ PYBIND11_MODULE(rmapy, m) {
             double,
             unsigned int,
             SamplingMode,
-            ShapeName
+            ShapeName,
+            RecurrenceFunction
         )>(&distribution),
         py::arg("x"),
         py::arg("y"),
@@ -71,7 +81,8 @@ PYBIND11_MODULE(rmapy, m) {
         py::arg("sampling") = 0.05,
         py::arg("threads") = 0,
         py::arg("sampling_mode") = SamplingMode::Random,
-        py::arg("shape") = ShapeName::Square
+        py::arg("shape") = ShapeName::Square,
+        py::arg("recurrence") = RecurrenceFunction::Standard
     );
 
     m.def("distribution",
@@ -82,7 +93,8 @@ PYBIND11_MODULE(rmapy, m) {
             double,
             unsigned int,
             SamplingMode,
-            ShapeName
+            ShapeName,
+            RecurrenceFunction
         )>(&distribution),
         py::arg("x"),
         py::arg("params"),
@@ -90,7 +102,8 @@ PYBIND11_MODULE(rmapy, m) {
         py::arg("sampling") = 0.05,
         py::arg("threads") = 0,
         py::arg("sampling_mode") = SamplingMode::Random,
-        py::arg("shape") = ShapeName::Square
+        py::arg("shape") = ShapeName::Square,
+        py::arg("recurrence") = RecurrenceFunction::Standard
     );
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `entropy` function.
