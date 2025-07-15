@@ -9,9 +9,12 @@ import time
 data = np.random.rand(3, 1000).astype(np.float64)
 data_2 = np.random.rand(3, 1000).astype(np.float64)
 
-teste = rma.distribution(data, data_2, [0.2, 0.2], 2, recurrence = rma.Recurrence.JRP)
+teste = rma.disorder(data, 2)
 print(teste)
-print(sum(teste))
+
+# teste = rma.distribution(data, data_2, [0.2, 0.2], 2, recurrence = rma.Recurrence.JRP)
+# print(teste)
+# print(sum(teste))
 
 ##      Try apply the RMAPy.
 # inicio = time.time()

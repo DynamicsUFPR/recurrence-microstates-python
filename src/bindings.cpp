@@ -17,6 +17,7 @@ namespace py = pybind11;
 #include "rqa/lam.h"
 #include "rqa/det.h"
 #include "rqa/entropy.h"
+#include "rqa/disorder.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Define the Python module:
 PYBIND11_MODULE(rmapy, m) {
@@ -117,4 +118,7 @@ PYBIND11_MODULE(rmapy, m) {
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `determinism` function.
     m.def("determinism", &determinism, "Estimate the determinism", py::arg("x"), py::arg("threshold"));
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Export `disorder` function.
+    m.def("disorder", &disorder, "Compute the disorder quantifier", py::arg("x"), py::arg("n"));
 }
