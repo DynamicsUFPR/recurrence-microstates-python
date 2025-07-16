@@ -15,6 +15,7 @@
 namespace py = pybind11;
 //  ------------------------------------------------------------------------------------------------------------------
 //          Necessary library files:
+#include "../rma/distribution.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Labels (n = 2, 3 and 4)
 //  n = 2
@@ -251,7 +252,7 @@ const std::vector<std::vector<uint16_t>> labels_n4 = {
     //{65535}
 };
 //  ------------------------------------------------------------------------------------------------------------------
-inline double disorder(const py::array_t<double> &x, const int n) {
+inline double disorder(const py::array_t<double> &x, const double threshold, const int n, const double threshold_range = 0.2, const int segment_size = 10) {
     //      Get labels.
     const std::vector<std::vector<uint16_t>>* labels_ptr = nullptr;
     switch (n) {
@@ -261,7 +262,72 @@ inline double disorder(const py::array_t<double> &x, const int n) {
         default: throw std::invalid_argument("Labels not implemented to n different than 2, 3, or 4.");
     }
 
-    return (*labels_ptr)[2][1];
+    //      Define the disorder normal factor.
+    const auto buffer = x.request();
+    double A;
+    switch (n) {
+        case 2: A = 4.0; break;
+        case 3:
+
+            A = 23.0;
+            if (buffer.ndim > 2) A = 24.0;
+            break;
+        case 4:
+            A = 145.0;
+            if (buffer.ndim > 2) A = 190.0;
+            break;
+        default: throw std::invalid_argument("Labels not implemented to n different than 2, 3, or 4.");
+    }
+
+    //      Compute the threshold range.
+    double min_threshold = threshold - threshold_range;
+    if (min_threshold <= 0) min_threshold = 0.0000000001;
+    const double max_threshold = threshold + threshold_range;
+    const double step_threshold = (max_threshold - min_threshold) / segment_size;
+
+    std::vector<py::object> vect_threshold(segment_size);
+
+    vect_threshold[0] = py::float_(min_threshold);
+    for (auto i = 1; i < segment_size; i++) vect_threshold[i] = vect_threshold[i - 1] + py::float_(step_threshold);
+
+    //      Compute each histogram and find the maximum disorder.
+    double result = 0.0;
+    int decrease_cnt = 0;
+
+    for (const auto& param : vect_threshold) {
+        //      Compute the distribution.
+        const auto dist = distribution(x, param, n, 0.05, 0, SamplingMode::Full);
+        //      Access the distribution (I used py::array_t into distribution, so it is necessary =/)
+        const auto dist_buffer = dist.request();
+        const double* dist_ptr = static_cast<double*>(dist_buffer.ptr);
+        //      Compute the disorder quantifier.
+        double entropy = 0.0;
+
+        for (const auto & label : *labels_ptr) {
+            double parc_entropy = 0.0;
+            double normal_factor = 0.0;
+
+            for (const unsigned short j : label) normal_factor += dist_ptr[j];
+            if (normal_factor <= 0) continue;
+
+            for (const unsigned short j : label) {
+                const double normalized_prob = dist_ptr[j] / normal_factor;
+                if (normalized_prob <= 0) continue;
+                parc_entropy += (-1) * (normalized_prob * log(normalized_prob));
+            }
+
+            entropy += parc_entropy / log(label.size());
+        }
+
+        entropy /= A;
+
+        if (entropy > result) result = entropy;
+        else decrease_cnt++;
+
+        if (decrease_cnt > 3) break;
+    }
+
+    return result;
 }
 //  ------------------------------------------------------------------------------------------------------------------
 #endif

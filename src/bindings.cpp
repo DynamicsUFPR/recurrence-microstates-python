@@ -120,5 +120,5 @@ PYBIND11_MODULE(rmapy, m) {
     m.def("determinism", &determinism, "Estimate the determinism", py::arg("x"), py::arg("threshold"));
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `disorder` function.
-    m.def("disorder", &disorder, "Compute the disorder quantifier", py::arg("x"), py::arg("n"));
+    m.def("disorder", &disorder, "Compute the disorder quantifier", py::arg("x"), py::arg("threshold"), py::arg("n"), py::arg("threshold_range") = 0.2, py::arg("segment_size") = 10);
 }

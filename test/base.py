@@ -6,11 +6,14 @@ import time
 
 ##
 ##      Create a "data".
-data = np.random.rand(3, 1000).astype(np.float64)
-data_2 = np.random.rand(3, 1000).astype(np.float64)
+data = np.random.rand(3, 10000).astype(np.float64)
+data_2 = np.random.rand(3, 10000).astype(np.float64)
 
-teste = rma.disorder(data, 2)
+inicio = time.time()
+teste = rma.disorder(data, 0.27, 4)
+fim = time.time()
 print(teste)
+print(f"Time: {(fim - inicio) * 1000:.2f} ms")
 
 # teste = rma.distribution(data, data_2, [0.2, 0.2], 2, recurrence = rma.Recurrence.JRP)
 # print(teste)
