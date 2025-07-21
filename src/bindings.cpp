@@ -18,6 +18,7 @@ namespace py = pybind11;
 #include "rqa/det.h"
 #include "rqa/entropy.h"
 #include "rqa/disorder.h"
+#include "utils/distances.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Define the Python module:
 PYBIND11_MODULE(rmapy, m) {
@@ -121,4 +122,7 @@ PYBIND11_MODULE(rmapy, m) {
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `disorder` function.
     m.def("disorder", &disorder, "Compute the disorder quantifier", py::arg("x"), py::arg("threshold"), py::arg("n"), py::arg("threshold_range") = 0.2, py::arg("segment_size") = 10);
+    //  --------------------------------------------------------------------------------------------------------------
+    //          Export `distances` function.
+    m.def("distances", &distances, py::arg("x"), py::arg("y"));
 }

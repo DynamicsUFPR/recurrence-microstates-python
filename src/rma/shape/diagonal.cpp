@@ -38,11 +38,11 @@ const ssize_t Diagonal::get_index(const std::vector<ssize_t> &idx, std::vector<s
         ssize_t y_idx = 0;
 
         for (ssize_t i = 1; i < x_info.ndim; i++) {
-            x_idx += itr[i - 1] * x_info.strides[i];
+            x_idx += itr[i - 1] * x_strides[i - 1];
         }
 
         for (ssize_t i = 1; i < y_info.ndim; i++) {
-            y_idx += itr[(i - 1) + (x_info.ndim - 1)] * y_info.strides[i];
+            y_idx += itr[(i - 1) + (x_info.ndim - 1)] * y_strides[i - 1];
         }
 
         if (recurrence->compute(x, y, first_dim_shape, first_dim_stride, x_idx, y_idx))

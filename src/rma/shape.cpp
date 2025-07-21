@@ -16,9 +16,20 @@ recurrence(recurrence),
 x(static_cast<double*>(x.ptr)),
 x_info(x),
 y(static_cast<double*>(y.ptr)),
-y_info(y) {
+y_info(y),
+x_strides(x.ndim - 1, 0),
+y_strides(y.ndim - 1, 0) {
+
     first_dim_shape = x_info.shape[0];
-    first_dim_stride = x_info.strides[0];
+    first_dim_stride = static_cast<ssize_t>(x_info.strides[0] / sizeof(double));
+
+    for (ssize_t i = 1; i < x.ndim; i++) {
+        x_strides[i - 1] = static_cast<ssize_t>(x.strides[i] / sizeof(double));
+    }
+
+    for (ssize_t i = 1; i < y.ndim; i++) {
+        y_strides[i - 1] = static_cast<ssize_t>(y.strides[i] / sizeof(double));
+    }
 }
 //  ------------------------------------------------------------------------------------------------------------------
 ssize_t IShape::numb_motifs() const {

@@ -40,6 +40,11 @@ protected:
     ///         Input y.
     const double* y;
     const py::buffer_info &y_info;
+
+    ///         Data strides.
+    std::vector<ssize_t> x_strides;
+    std::vector<ssize_t> y_strides;
+
     ///         Values for first dimension (is equal!)
     ssize_t first_dim_shape;
     ssize_t first_dim_stride;

@@ -34,7 +34,7 @@ protected:
     ///         Number of elements of a structure.
     const int structure_size;
     ///         Function to get each motif position and run the process.
-    virtual std::vector<double> task(ssize_t begin, ssize_t end) const = 0;
+    [[nodiscard]] virtual std::vector<double> task(ssize_t begin, ssize_t end) const = 0;
 
 public:
     ///         Run
