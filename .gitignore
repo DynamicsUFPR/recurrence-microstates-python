@@ -36,5 +36,5 @@
 # Ignore some folders
 .idea
 cmake-build-debug
-rmapy.egg-info
+recurrence_microstates.egg-info
 build
