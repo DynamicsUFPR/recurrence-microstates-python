@@ -1,7 +1,7 @@
 ##
 ##      Import NumPy and RMAPy
 import numpy as np
-import rmapy as rma
+import recurrence_microstates as rma
 import time
 
 ##

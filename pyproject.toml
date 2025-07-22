@@ -3,7 +3,7 @@ requires = ["pybind11", "setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "rmapy"
+name = "recurrence_microstates"
 version = "0.1.0"
 description = "A Python library for analyzing dynamical systems with recurrence microstates."
 authors = [

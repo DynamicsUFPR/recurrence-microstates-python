@@ -24,7 +24,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pybind11)
 
 ##      Add the Python Module
-pybind11_add_module(rmapy
+pybind11_add_module(recurrence_microstates
         src/bindings.cpp
         src/rma/distribution.cpp
         src/rma/histogram.cpp

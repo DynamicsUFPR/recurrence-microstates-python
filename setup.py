@@ -24,7 +24,7 @@ from setuptools import setup, Extension
 ##      - Define the extension module settings.
 ext_modules = [
     Extension(
-        "rmapy",
+        "recurrence_microstates",
         [
             "src/bindings.cpp",
             "src/rma/distribution.cpp",

@@ -21,7 +21,7 @@ namespace py = pybind11;
 #include "utils/distances.h"
 //  ------------------------------------------------------------------------------------------------------------------
 //          Define the Python module:
-PYBIND11_MODULE(rmapy, m) {
+PYBIND11_MODULE(recurrence_microstates, m) {
     m.doc() = "A Python library for analyzing dynamical systems with recurrence microstates.";
     //  --------------------------------------------------------------------------------------------------------------
     //          Export sampling modes.
