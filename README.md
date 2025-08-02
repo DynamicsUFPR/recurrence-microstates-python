@@ -21,7 +21,7 @@ git clone https://github.com/DynamicsUFPR/recurrence-microstates-python.git
 cd recurrence-microstates-python
 ```
 
-Then, try installing it using:
+Then, try to install it using:
 ```text
 pip install .
 ```
