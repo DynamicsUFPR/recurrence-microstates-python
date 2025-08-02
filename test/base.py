@@ -6,8 +6,7 @@ import time
 
 ##
 ##      Create a "data".
-data = np.random.rand(3, 10000).astype(np.float64)
-data_2 = np.random.rand(3, 10000).astype(np.float64)
+data = np.random.uniform(0, 1, 1000).astype(np.float64)
 
 inicio = time.time()
 teste = rma.disorder(data, 0.27, 4)

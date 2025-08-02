@@ -112,13 +112,13 @@ PYBIND11_MODULE(recurrence_microstates, m) {
     m.def("entropy", &entropy, "Compute the recurrence microstates entropy.", py::arg("dist"));
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `rate` function.
-    m.def("rate", &rate, "Estimate the recurrence rate.", py::arg("dist"));
+    m.def("recurrence_rate", &recurrence_rate, "Estimate the recurrence rate.", py::arg("dist"));
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `laminarity` function.
-    m.def("laminarity", &laminarity, "Estimate the laminarity", py::arg("x"), py::arg("threshold"));
+    m.def("laminarity", &laminarity, "Estimate the laminarity", py::arg("x"), py::arg("threshold"), py::arg("threads") = 0);
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `determinism` function.
-    m.def("determinism", &determinism, "Estimate the determinism", py::arg("x"), py::arg("threshold"));
+    m.def("determinism", &determinism, "Estimate the determinism", py::arg("x"), py::arg("threshold"), py::arg("threads") = 0);
     //  --------------------------------------------------------------------------------------------------------------
     //          Export `disorder` function.
     m.def("disorder", &disorder, "Compute the disorder quantifier", py::arg("x"), py::arg("threshold"), py::arg("n"), py::arg("threshold_range") = 0.2, py::arg("segment_size") = 10);

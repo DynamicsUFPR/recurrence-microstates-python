@@ -19,14 +19,14 @@ namespace py = pybind11;
 #include "rr.h"
 //  ------------------------------------------------------------------------------------------------------------------
 ///         Compute the laminarity.
-inline double laminarity(const py::array_t<double> &x, const py::object &threshold) {
+inline double laminarity(const py::array_t<double> &x, const py::object &threshold, const unsigned int threads = 0) {
     //          Compute the distribution.
-    const py::array_t<double> dist = distribution(x, x, threshold, std::vector<int>{3, 1});
+    const py::array_t<double> dist = distribution(x, x, threshold, std::vector{3, 1}, 0.05, threads);
 
     const py::buffer_info info = dist.request();
     const auto ptr = static_cast<double *>(info.ptr);
     //          Compute the recurrence rate.
-    const double rr = rate(std::vector<double>(ptr, ptr + info.shape[0]));
+    const double rr = recurrence_rate(std::vector(ptr, ptr + info.shape[0]));
 
     //          Compute laminarity.
     return 1 - ((1 / rr) * ptr[2]);

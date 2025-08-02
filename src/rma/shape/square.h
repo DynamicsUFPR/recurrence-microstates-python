@@ -19,7 +19,7 @@ namespace py = pybind11;
 ///         Virtual class to reference a sampling mode.
 class Square final : public IShape {
     ///         Compute the motif area.
-    auto compute_area() const -> int override;
+    [[nodiscard]] auto compute_area() const -> int override;
 public:
     ///         Compute a motif decimal identifier (MDI).
     const ssize_t get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const override;

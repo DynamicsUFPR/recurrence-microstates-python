@@ -52,7 +52,7 @@ protected:
     [[nodiscard]] virtual int compute_area() const = 0;
 public:
     ///         Compute a motif decimal identifier (MDI).
-    virtual auto get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const -> const ssize_t = 0;
+    virtual const ssize_t get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const = 0;
     ///         Get the number of motifs that can exist.
     [[nodiscard]] ssize_t numb_motifs() const;
     ///         Class construction.

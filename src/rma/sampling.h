@@ -38,7 +38,7 @@ protected:
 
 public:
     ///         Run
-    virtual const std::vector<double> run(unsigned int threads) const = 0;
+    [[nodiscard]] virtual const std::vector<double> run(unsigned int threads) const = 0;
     ///         Class construction.
     explicit ISampling(const py::buffer_info &x, const py::buffer_info &y, const std::unique_ptr<IShape> &shape, const std::vector<int> &structure);
     ///         Class deconstruction.
