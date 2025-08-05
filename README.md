@@ -210,7 +210,7 @@ det = rma.determinism(x, threshold)
 lam = rma.laminarity(x, threshold)
 ```
 
-Disorder is also computed from a trajectory, but with other configurations to set:
+Disorder is also computed from a trajectory:
 ```python
 import numpy as np
 import recurrence_microstates as rma
