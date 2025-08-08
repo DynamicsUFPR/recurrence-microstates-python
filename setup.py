@@ -18,8 +18,15 @@
 ##          pip install .
 ## ---------------------------------------------------------------------------------------------------------------------
 ##      - Import the necessary python libraries to compile the project.
+import sys
+
 import pybind11
 from setuptools import setup, Extension
+## ---------------------------------------------------------------------------------------------------------------------
+##      - Define the compiler (necessary when using Window)
+compiler = None
+if sys.platform == "win32":
+    compiler = "mingw32"
 ## ---------------------------------------------------------------------------------------------------------------------
 ##      - Define the extension module settings.
 ext_modules = [
@@ -49,4 +56,5 @@ setup(
     description = "A Python library for analyzing dynamical systems with recurrence microstates",
     ext_modules = ext_modules,
     zip_safe = False,
+    options = {"build": {"compiler": compiler}} if compiler else {},
 )
