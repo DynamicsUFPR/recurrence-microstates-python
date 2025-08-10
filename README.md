@@ -26,8 +26,7 @@ Then, try to install it using:
 pip install .
 ```
 
-There might be an issue with the `.so` file name. If this happens,
-try renaming the folder `recurrence-microstates-python` to `recurrence_microstates`, and run `pip install .` again.
+If occours an issue with the `.so` file name, then rename folder `recurrence-microstates-python` to `recurrence_microstates`, and run `pip install .` again.
 
 ## Library usage guide
 
