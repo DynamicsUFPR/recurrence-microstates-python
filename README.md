@@ -192,7 +192,7 @@ x = np.random.uniform(0, 1, 1000).astype(np.float64)
 dist = rma.distribution(x, threshold, motif_size)
 
 rme = rma.entropy(dist)
-rr = rma.rate(dist)
+rr = rma.recurrence_rate(dist)
 ```
 
 DET and LAM are estimated directly from a trajectory, such as
