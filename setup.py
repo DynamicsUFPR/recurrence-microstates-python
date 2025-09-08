@@ -24,9 +24,11 @@ import pybind11
 from setuptools import setup, Extension
 ## ---------------------------------------------------------------------------------------------------------------------
 ##      - Define the compiler (necessary when using Window)
-compiler = None
+lang = None
 if sys.platform == "win32":
-    compiler = "mingw32"
+    lang = "/std:c++17"
+else:
+    lang = "-std=c++17"
 ## ---------------------------------------------------------------------------------------------------------------------
 ##      - Define the extension module settings.
 ext_modules = [
@@ -45,7 +47,7 @@ ext_modules = [
         ],
         include_dirs = [pybind11.get_include()],
         language = "c++",
-        extra_compile_args = ["-std=c++23"],
+        extra_compile_args = [lang],
     ),
 ]
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -56,5 +58,4 @@ setup(
     description = "A Python library for analyzing dynamical systems with recurrence microstates",
     ext_modules = ext_modules,
     zip_safe = False,
-    options = {"build": {"compiler": compiler}} if compiler else {},
 )

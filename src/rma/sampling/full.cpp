@@ -31,7 +31,7 @@ Full::Full(
     const ssize_t x_dims = x.ndim - 1;
     const ssize_t y_dims = y.ndim - 1;
 
-    if (structure.size() != x_dims + y_dims) throw std::invalid_argument("Structure is not compatible with the input data.");
+    if (static_cast<ssize_t>(structure.size()) != x_dims + y_dims) throw std::invalid_argument("Structure is not compatible with the input data.");
     if (x.shape[0] != y.shape[0]) throw std::invalid_argument("`x` and `y` first dimension must have same size.");
 
     for (ssize_t i = 0; i < x_dims; i++) {

@@ -30,7 +30,7 @@ int Diagonal::compute_area() const {
 const ssize_t Diagonal::get_index(const std::vector<ssize_t> &idx, std::vector<ssize_t> &itr) const {
     ssize_t index = 0;
     //          Copy values from idx to itr.
-    std::ranges::copy(idx, itr.begin());
+    std::copy(idx.begin(), idx.end(), itr.begin());
 
     //          Iterate...
     for (const int m : power_vector) {

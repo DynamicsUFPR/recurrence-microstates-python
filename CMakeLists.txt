@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
-project(rmapy LANGUAGES CXX)
+project(recurrence_microstates LANGUAGES CXX)
 
-##      We will use C++ 23+
-set(CMAKE_CXX_STANDARD 23)
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
-    add_compile_options(-std=c++23)
-endif()
+##      We will use C++ 17+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 ##      Active the compilation mode with Python extension.
@@ -37,4 +35,4 @@ pybind11_add_module(recurrence_microstates
 )
 
 ##      Include files .h
-target_include_directories(rmapy PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(recurrence_microstates PRIVATE ${CMAKE_SOURCE_DIR}/src)
