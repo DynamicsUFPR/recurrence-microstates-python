@@ -32,7 +32,7 @@ inline double recurrence_rate(const std::vector<double>& dist) {
     //          Get "area" of a "motif structure" (idk how write it in english >.<)
     const auto area = static_cast<ssize_t>(std::floor(log2(dist.size())));
     //          Compute...
-    for (ssize_t i = 0; i < dist.size(); ++i) {
+    for (unsigned long i = 0; i < dist.size(); ++i) {
         const double rr_i = local_rr(i, area);
         result += rr_i * dist[i];
     }

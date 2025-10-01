@@ -94,6 +94,7 @@ dist = rma.distribution(data, threshold, motif_size, sampling_mode = rma.Samplin
 - Shape.Square: the default motif constrained shape, it defines a square-shaped motif. It can also be used to get a rectangle motif, we will
 demonstrate it in the examples.
 - Shape.Diagonal: this motif constrained shape was introduced to simplify the estimation of determinism using RMA.
+- Shape.Triangle: motif constrained shape introduced by Hirata. ([read about here](https://doi.org/10.1016/j.cnsns.2020.105552))
 
 Example using square-shaped motifs to construct a rectangle motif (in this case, we compute a line-shaped motif necessary to estimate laminarity):
 ```python

@@ -103,7 +103,7 @@ std::vector<double> Random::task(const ssize_t begin, const ssize_t end) const {
 
     //          Run
     for (ssize_t i = begin; i <= end; i++) {
-        for (ssize_t s = 0; s < rp_structure.size(); ++s) {
+        for (unsigned long s = 0; s < rp_structure.size(); ++s) {
             idx[s] = std::uniform_int_distribution<ssize_t>(1, rp_structure[s])(gen);
         }
         result[shape->get_index(idx, itr)]++;

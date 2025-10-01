@@ -21,7 +21,7 @@
 namespace py = pybind11;
 //  ------------------------------------------------------------------------------------------------------------------
 //          Shape names:
-enum class ShapeName { Square, Diagonal };
+enum class ShapeName { Square, Diagonal, Triangle };
 //  ------------------------------------------------------------------------------------------------------------------
 ///         Virtual class to reference motif shapes.
 class IShape {

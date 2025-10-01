@@ -17,7 +17,7 @@ Diagonal::Diagonal(
     //          Compute the motif area.
     motif_area = compute_area();
     //          Build our power vector.
-    power_vector = std::vector<int>(motif_area, 1);
+    power_vector = std::vector(motif_area, 1);
     for (int i = 0; i < motif_area; i++) {
         power_vector[i] = static_cast<int>(std::pow(2, i));
     }
@@ -48,7 +48,7 @@ const ssize_t Diagonal::get_index(const std::vector<ssize_t> &idx, std::vector<s
         if (recurrence->compute(x, y, first_dim_shape, first_dim_stride, x_idx, y_idx))
             index += m;
 
-        for (ssize_t k = 0; k < structure.size(); k++) {
+        for (unsigned long k = 0; k < structure.size(); k++) {
             itr[k] += 1;
         }
     }

@@ -41,6 +41,7 @@ ext_modules = [
             "src/rma/shape.cpp",
             "src/rma/shape/square.cpp",
             "src/rma/shape/diagonal.cpp",
+            "src/rma/shape/triangle.cpp",
             "src/rma/sampling.cpp",
             "src/rma/sampling/full.cpp",
             "src/rma/sampling/random.cpp"

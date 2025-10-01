@@ -32,7 +32,8 @@ PYBIND11_MODULE(recurrence_microstates, m) {
     //          Export shapes.
     py::enum_<ShapeName>(m, "Shape")
         .value("Square", ShapeName::Square)
-        .value("Diagonal", ShapeName::Diagonal);
+        .value("Diagonal", ShapeName::Diagonal)
+        .value("Triangle", ShapeName::Triangle);
     //  --------------------------------------------------------------------------------------------------------------
     //          Export recurrence functions.
     py::enum_<RecurrenceFunction>(m, "Recurrence")
